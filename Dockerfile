@@ -1,4 +1,4 @@
-FROM elixir:1.15.4-otp-26-slim as build
+FROM elixir:1.15.4-slim as build
 
 ARG MIX_ENV=prod
 ARG OAUTH_CONSUMER_STRATEGIES="twitter facebook google microsoft github keycloak:ueberauth_keycloak_strategy"
@@ -19,7 +19,7 @@ RUN cd /src &&\
 
 # ---
 
-FROM elixir:1.15.4-otp-26-slim
+FROM elixir:1.15.4-slim
 
 ARG BUILD_DATE
 ARG VCS_REF
