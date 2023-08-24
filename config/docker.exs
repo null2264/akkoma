@@ -6,7 +6,7 @@ config :pleroma, Pleroma.Web.Endpoint,
 
 config :pleroma, :instance,
   name: System.get_env("INSTANCE_NAME", "Pleroma"),
-  email: System.get_env("ADMIN_EMAIL"),
+  email: System.fetch_env!("ADMIN_EMAIL"),
   notify_email: System.get_env("NOTIFY_EMAIL"),
   limit: 5000,
   registrations_open: false,
