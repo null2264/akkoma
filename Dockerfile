@@ -18,8 +18,8 @@ RUN apk add git gcc g++ musl-dev make cmake file-dev exiftool ffmpeg imagemagick
 
 EXPOSE 4000
 
-ARG UID=1000
-ARG GID=1000
+ARG GID=4000
+ARG UID=4001
 ARG UNAME=akkoma
 
 RUN addgroup -g $GID $UNAME
