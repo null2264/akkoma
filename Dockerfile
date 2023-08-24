@@ -1,34 +1,62 @@
-FROM hexpm/elixir:1.15.4-erlang-26.0.2-alpine-3.18.2
+FROM elixir:1.15.4-otp-24-slim as build
 
-ENV MIX_ENV=prod
-ENV ERL_EPMD_ADDRESS=127.0.0.1
+ARG MIX_ENV=prod \
+    OAUTH_CONSUMER_STRATEGIES="twitter facebook google microsoft github keycloak:ueberauth_keycloak_strategy"
 
-ARG HOME=/opt/akkoma
+WORKDIR /src
 
-LABEL org.opencontainers.image.title="akkoma" \
-    org.opencontainers.image.description="Akkoma for Docker" \
-    org.opencontainers.image.vendor="akkoma.dev" \
-    org.opencontainers.image.documentation="https://docs.akkoma.dev/stable/" \
+RUN apt update &&\
+    apt install -y git build-essential cmake libssl-dev libmagic-dev automake autoconf libncurses5-dev &&\
+    mix local.hex --force &&\
+    mix local.rebar --force
+
+COPY . /src
+
+RUN cd /src &&\
+    mix deps.get --only prod &&\
+    mkdir release &&\
+    mix release --path release
+
+FROM elixir:1.15.4-otp-24-slim
+
+ARG BUILD_DATE
+ARG VCS_REF
+
+ARG DEBIAN_FRONTEND="noninteractive"
+ENV TZ="Etc/UTC"
+
+LABEL maintainer="hello@soapbox.pub" \
+    org.opencontainers.image.title="rebased" \
+    org.opencontainers.image.description="Rebased" \
+    org.opencontainers.image.authors="hello@soapbox.pub" \
+    org.opencontainers.image.vendor="soapbox.pub" \
+    org.opencontainers.image.documentation="https://gitlab.com/null2264/rebased" \
     org.opencontainers.image.licenses="AGPL-3.0" \
-    org.opencontainers.image.url="https://akkoma.dev" \
+    org.opencontainers.image.url="https://gitlab.com/null2264/rebased" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 
-RUN apk add git gcc g++ musl-dev make cmake file-dev exiftool ffmpeg imagemagick libmagic ncurses postgresql-client
+ARG HOME=/opt/pleroma
+ARG DATA=/var/lib/pleroma
 
-EXPOSE 4000
 
-ARG GID=4000
-ARG UID=4001
-ARG UNAME=akkoma
+RUN apt update &&\
+    apt install -y --no-install-recommends curl ca-certificates imagemagick libmagic-dev ffmpeg libimage-exiftool-perl libncurses5 postgresql-client fasttext &&\
+    adduser --system --shell /bin/false --home ${HOME} pleroma &&\
+    mkdir -p ${DATA}/uploads &&\
+    mkdir -p ${DATA}/static &&\
+    chown -R pleroma ${DATA} &&\
+    mkdir -p /etc/pleroma &&\
+    chown -R pleroma /etc/pleroma &&\
+    mkdir -p /usr/share/fasttext &&\
+    curl -L https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz -o /usr/share/fasttext/lid.176.ftz &&\
+    chmod 0644 /usr/share/fasttext/lid.176.ftz
 
-RUN addgroup -g $GID $UNAME
-RUN adduser -u $UID -G $UNAME -D -h $HOME $UNAME
+USER pleroma
 
-WORKDIR /opt/akkoma
+COPY --from=build --chown=pleroma:0 /src/release ${HOME}
 
-USER $UNAME
-RUN mix local.hex --force &&\
-    mix local.rebar --force
+COPY --chown=pleroma --chmod=640 ./config/docker.exs /etc/pleroma/config.exs
+COPY ./docker-entrypoint.sh ${HOME}
 
-CMD ["/opt/akkoma/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/pleroma/docker-entrypoint.sh"]
