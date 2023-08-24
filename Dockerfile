@@ -34,26 +34,29 @@ LABEL org.opencontainers.image.title="akkoma" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 
+ARG GID=4000
+ARG UID=4001
 ARG HOME=/opt/pleroma
 ARG DATA=/var/lib/pleroma
 
 RUN apt update &&\
     apt install -y --no-install-recommends curl ca-certificates imagemagick libmagic-dev ffmpeg libimage-exiftool-perl libncurses5 postgresql-client fasttext &&\
-    adduser --system --shell /bin/false --home ${HOME} pleroma &&\
-    mkdir -p ${DATA}/uploads &&\
-    mkdir -p ${DATA}/static &&\
-    chown -R pleroma ${DATA} &&\
+    addgroup --gid $GID pleroma &&\
+    adduser --system --shell /bin/false --uid $UID --gid $GID --home $HOME pleroma &&\
+    mkdir -p $DATA/uploads &&\
+    mkdir -p $DATA/static &&\
+    chown -R pleroma:pleroma $DATA &&\
     mkdir -p /etc/pleroma &&\
-    chown -R pleroma /etc/pleroma &&\
+    chown -R pleroma:pleroma /etc/pleroma &&\
     mkdir -p /usr/share/fasttext &&\
     curl -L https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz -o /usr/share/fasttext/lid.176.ftz &&\
     chmod 0644 /usr/share/fasttext/lid.176.ftz
 
 USER pleroma
 
-COPY --from=build --chown=pleroma:0 /src/release ${HOME}
+COPY --from=build --chown=pleroma:pleroma /src/release ${HOME}
 
-COPY --chown=pleroma --chmod=640 ./config/docker.exs /etc/pleroma/config.exs
+COPY --chown=pleroma:pleroma --chmod=640 ./config/docker.exs /etc/pleroma/config.exs
 COPY ./docker-entrypoint.sh ${HOME}
 
 ENTRYPOINT ["/opt/pleroma/docker-entrypoint.sh"]
