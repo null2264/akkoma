@@ -1,7 +1,7 @@
 FROM postgres:14-alpine
 
-ARG UID=1000
-ARG GID=1000
+ARG GID=4000
+ARG UID=4001
 ARG UNAME=akkoma
 
 RUN addgroup -g $GID $UNAME
