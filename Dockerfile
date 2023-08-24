@@ -1,7 +1,7 @@
-FROM elixir:1.15.4-otp-24-slim as build
+FROM elixir:1.15.4-otp-26-slim as build
 
-ARG MIX_ENV=prod \
-    OAUTH_CONSUMER_STRATEGIES="twitter facebook google microsoft github keycloak:ueberauth_keycloak_strategy"
+ARG MIX_ENV=prod
+ARG OAUTH_CONSUMER_STRATEGIES="twitter facebook google microsoft github keycloak:ueberauth_keycloak_strategy"
 
 WORKDIR /src
 
@@ -17,7 +17,9 @@ RUN cd /src &&\
     mkdir release &&\
     mix release --path release
 
-FROM elixir:1.15.4-otp-24-slim
+# ---
+
+FROM elixir:1.15.4-otp-26-slim
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -25,20 +27,15 @@ ARG VCS_REF
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Etc/UTC"
 
-LABEL maintainer="hello@soapbox.pub" \
-    org.opencontainers.image.title="rebased" \
-    org.opencontainers.image.description="Rebased" \
-    org.opencontainers.image.authors="hello@soapbox.pub" \
-    org.opencontainers.image.vendor="soapbox.pub" \
-    org.opencontainers.image.documentation="https://gitlab.com/null2264/rebased" \
+LABEL org.opencontainers.image.title="akkoma" \
+    org.opencontainers.image.documentation="https://gitlab.com/null2264/akkoma" \
     org.opencontainers.image.licenses="AGPL-3.0" \
-    org.opencontainers.image.url="https://gitlab.com/null2264/rebased" \
+    org.opencontainers.image.url="https://gitlab.com/null2264/akkoma" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 
 ARG HOME=/opt/pleroma
 ARG DATA=/var/lib/pleroma
-
 
 RUN apt update &&\
     apt install -y --no-install-recommends curl ca-certificates imagemagick libmagic-dev ffmpeg libimage-exiftool-perl libncurses5 postgresql-client fasttext &&\
