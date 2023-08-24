@@ -10,7 +10,7 @@ while ! pg_isready -d $DATABASE_URL -t 1; do
 done
 
 echo "-- Running migrations..."
-mix ecto.migrate
+$HOME/bin/pleroma_ctl migrate
 
 echo "-- Starting!"
-mix phx.server
+exec $HOME/bin/pleroma start
