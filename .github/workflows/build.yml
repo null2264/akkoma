@@ -31,7 +31,7 @@ jobs:
 
       - name: Build Akkoma
         env:
-          MIX_ENV=prod
+          MIX_ENV: prod
         run: |
           mix deps.get --only prod
           mix release --path release
