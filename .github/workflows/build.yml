@@ -13,6 +13,7 @@ jobs:
   build:
     name: Build Akkoma
     runs-on: ubuntu-latest
+    container: hexpm/elixir:1.15.4-erlang-26.0.2-debian-bookworm-20230612
 
     steps:
       - uses: actions/checkout@v3
