@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Akkoma
         run: |
-          mix deps.get --only prod
+          mix deps.get
           mix release --path release
           zip akkoma.zip -r release
 
