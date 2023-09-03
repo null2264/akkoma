@@ -23,7 +23,7 @@ jobs:
 
       - name: Preparing build environment
         run: |
-          (rm -rf release || true) && (rm -rf _build || true) && (rm -rf /root/.mix)
+          (rm -rf release || true) && (rm -rf _build || true) && (sudo rm -rf /root/.mix)
           echo "import Config" > config/prod.secret.exs
           mix local.hex --force && mix local.rebar --force
           echo "PLEROMA_BUILD_BRANCH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
