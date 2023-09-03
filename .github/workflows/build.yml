@@ -14,8 +14,6 @@ jobs:
     name: Build Akkoma
     runs-on: ubuntu-latest
     container: hexpm/elixir:1.15.4-erlang-26.0.2-debian-bookworm-20230612
-    environment:
-      MIX_ENV: prod
 
     steps:
       - uses: actions/checkout@v3
@@ -32,6 +30,8 @@ jobs:
           echo "BUILD_TAG=${GITHUB_REF#refs/(heads|tags)/}" >> $GITHUB_ENV
 
       - name: Build Akkoma
+        env:
+          MIX_ENV: prod
         run: |
           echo $BUILD_TAG
           mix deps.get --only prod
