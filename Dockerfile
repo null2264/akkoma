@@ -39,8 +39,7 @@ ARG DATA=/var/lib/akkoma
 
 RUN apt update &&\
     apt install -y --no-install-recommends curl ca-certificates imagemagick libmagic-dev ffmpeg libimage-exiftool-perl libncurses5 postgresql-client fasttext &&\
-    addgroup --gid $GID akkoma &&\
-    adduser --system --shell /bin/false --uid $UID --gid $GID --home $HOME akkoma &&\
+    adduser --system --shell /bin/false --home $HOME akkoma &&\
     mkdir -p $DATA/uploads &&\
     mkdir -p $DATA/static &&\
     chown -R akkoma $DATA &&\
