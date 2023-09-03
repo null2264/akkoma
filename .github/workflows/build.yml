@@ -27,6 +27,7 @@ jobs:
           (rm -rf release || true) && (rm -rf _build || true) && (rm -rf /root/.mix)
           echo "import Config" > config/prod.secret.exs
           mix local.hex --force && mix local.rebar --force
+          mix deps.clean --all
           echo "PLEROMA_BUILD_BRANCH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
 
       - name: Build Akkoma
