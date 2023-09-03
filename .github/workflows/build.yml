@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+    tags:
+      - 3.*
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Akkoma
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y cmake libmagic-dev rclone zip imagemagick libmagic-dev git build-essential g++ wget
+
+      - name: Preparing build environment
+        run: |
+          (rm -rf release || true) && (rm -rf _build || true) && (rm -rf /root/.mix)
+          echo "import Config" > config/prod.secret.exs
+          mix local.hex --force && mix local.rebar --force
+          echo "PLEROMA_BUILD_BRANCH=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+
+      - name: Build Akkoma
+        run: |
+          mix deps.get --only prod
+          mix release --path release
+          zip akkoma.zip -r release
+
+      - name: Upload build folder as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: akkoma
+          path: release/
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload build to a release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'null2264/akkoma'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ./akkoma.zip
