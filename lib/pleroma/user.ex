@@ -2086,12 +2086,12 @@ defmodule Pleroma.User do
 
   def parse_bio(bio, user) when is_binary(bio) and bio != "" do
     # TODO: get profile URLs other than user.ap_id
-    profile_urls = [user.ap_id]
+    possible_urls = [user.ap_id, url(~p[/#{user.nickname}]), url(~p[/@#{user.nickname}])]
 
     CommonUtils.format_input(bio, "text/plain",
       mentions_format: :full,
       rel: fn link ->
-        case RelMe.maybe_put_rel_me(link, profile_urls) do
+        case RelMe.maybe_put_rel_me(link, possible_urls) do
           "me" -> "me"
           _ -> nil
         end
@@ -2449,9 +2449,7 @@ defmodule Pleroma.User do
           end
 
         if is_url(raw_value) do
-          frontend_url = url(~p[/#{nickname}])
-
-          possible_urls = [ap_id, frontend_url]
+          possible_urls = [ap_id, url(~p[/#{nickname}]), url(~p[/@#{nickname}])]
 
           with "me" <- RelMe.maybe_put_rel_me(raw_value, possible_urls) do
             %{
