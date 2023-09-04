@@ -17,7 +17,6 @@ defmodule Pleroma.Web.Nonce do
 
   def build_script_tag(content, nonce) do
     HTML.Tag.content_tag(:script, HTML.raw(content),
-      type: "application/json",
       nonce: nonce
     )
   end
