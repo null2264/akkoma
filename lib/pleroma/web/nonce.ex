@@ -8,8 +8,10 @@ defmodule Pleroma.Web.Nonce do
   def build_tag(%{assigns: %{csp_nonce: nonce}}) do
     if Pleroma.Config.get([:instance, :provide_nonce]) do
       build_script_tag("window['_akkomaNonce'] = '#{nonce}'", nonce)
+      |> HTML.safe_to_string()
     else
       build_script_tag("window['_akkomaNonce'] = ''", nonce)
+      |> HTML.safe_to_string()
     end
   end
 
