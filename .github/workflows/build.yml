@@ -11,11 +11,16 @@ on:
 
 jobs:
   build:
-    name: Build Akkoma
+    name: Build Akkoma (amd64-glibc)
     runs-on: ubuntu-latest
     container: hexpm/elixir:1.15.4-erlang-26.0.2-debian-bookworm-20230612
 
     steps:
+      - name: Install latest version of GIT
+        run: |
+          apt-get update
+          apt-get install -y git
+
       - uses: actions/checkout@v3
 
       - name: Install dependencies
