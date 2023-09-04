@@ -19,7 +19,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   end
 
   def redirector(conn, params, code \\ 200) do
-    redirector_with_ssr(conn, params, [:title, :favicon], code)
+    redirector_with_ssr(conn, params, [:nonce, :title, :favicon], code)
   end
 
   def redirector_with_meta(conn, %{"maybe_nickname_or_id" => maybe_nickname_or_id} = params) do
@@ -32,7 +32,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   end
 
   def redirector_with_meta(conn, params) do
-    redirector_with_ssr(conn, params, [:tags, :preload, :title, :favicon])
+    redirector_with_ssr(conn, params, [:tags, :nonce, :preload, :title, :favicon])
   end
 
   def redirector_with_preload(conn, %{"path" => ["pleroma", "admin"]}) do
@@ -40,7 +40,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   end
 
   def redirector_with_preload(conn, params) do
-    redirector_with_ssr(conn, params, [:preload, :title, :favicon])
+    redirector_with_ssr(conn, params, [:nonce, :preload, :title, :favicon])
   end
 
   def redirector_with_ssr(conn, params, keys, code \\ 200) do
