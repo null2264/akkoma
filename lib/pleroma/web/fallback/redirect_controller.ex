@@ -78,7 +78,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
     end)
   end
 
-  defp build_meta(:nonce, {conn, params}) do
+  defp build_meta(:nonce, {conn, _params}) do
     try do
       # TODO: Test nonce
       Nonce.build_tag(conn)
