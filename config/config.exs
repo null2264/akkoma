@@ -251,7 +251,8 @@ config :pleroma, :instance,
   local_bubble: [],
   max_frontend_settings_json_chars: 100_000,
   export_prometheus_metrics: true,
-  federated_timeline_available: true
+  federated_timeline_available: true,
+  provide_nonce: false
 
 config :pleroma, :welcome,
   direct_message: [

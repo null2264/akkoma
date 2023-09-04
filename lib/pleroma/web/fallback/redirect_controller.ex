@@ -9,6 +9,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
 
   alias Pleroma.User
   alias Pleroma.Web.Metadata
+  alias Pleroma.Web.Nonce
   alias Pleroma.Web.Preload
 
   def api_not_implemented(conn, _params) do
@@ -35,13 +36,15 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   def redirector_with_meta(conn, params) do
     {:ok, index_content} = File.read(index_file_path(conn))
 
+    # TODO: Test nonce
+    nonce = Nonce.build_tag(conn)
     tags = build_tags(conn, params)
     preloads = preload_data(conn, params)
     title = "<title>#{Pleroma.Config.get([:instance, :name])}</title>"
 
     response =
       index_content
-      |> String.replace("<!--server-generated-meta-->", tags <> preloads <> title)
+      |> String.replace("<!--server-generated-meta-->", tags <> preloads <> nonce <> title)
 
     conn
     |> put_resp_content_type("text/html")
@@ -55,12 +58,14 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   def redirector_with_preload(conn, params) do
     {:ok, index_content} = File.read(index_file_path(conn))
     preloads = preload_data(conn, params)
+    # TODO: Test nonce
+    nonce = Nonce.build_tag(conn)
     tags = Metadata.build_static_tags(params)
     title = "<title>#{Pleroma.Config.get([:instance, :name])}</title>"
 
     response =
       index_content
-      |> String.replace("<!--server-generated-meta-->", tags <> preloads <> title)
+      |> String.replace("<!--server-generated-meta-->", tags <> preloads <> nonce <> title)
 
     conn
     |> put_resp_content_type("text/html")
