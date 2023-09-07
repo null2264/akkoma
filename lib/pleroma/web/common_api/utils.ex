@@ -203,6 +203,7 @@ defmodule Pleroma.Web.CommonAPI.Utils do
 
   defp validate_poll_expiration(expires_in, %{min_expiration: min, max_expiration: max}) do
     cond do
+      nil -> :ok
       expires_in > max -> {:error, "Expiration date is too far in the future"}
       expires_in < min -> {:error, "Expiration date is too soon"}
       true -> :ok
