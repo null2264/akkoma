@@ -16,11 +16,11 @@ defmodule Pleroma.Mixfile do
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: ["coveralls.html": :test],
       # Docs
-      name: "Akkoma",
-      homepage_url: "https://akkoma.dev/",
-      source_url: "https://akkoma.dev/AkkomaGang/akkoma",
+      name: "Spirit",
+      homepage_url: "https://github.com/null2264/akkoma",
+      source_url: "https://github.com/null2264/akkoma",
       docs: [
-        source_url_pattern: "https://akkoma.dev/AkkomaGang/akkoma/blob/develop/%{path}#L%{line}",
+        source_url_pattern: "https://github.com/null2264/akkoma/blob/develop/%{path}#L%{line}",
         logo: "priv/static/images/logo.png",
         extras: ["README.md", "CHANGELOG.md"] ++ Path.wildcard("docs/**/*.md"),
         groups_for_extras: [
@@ -342,6 +342,9 @@ defmodule Pleroma.Mixfile do
 # SPDX-License-Identifier: AGPL-3.0-only
 # Akkoma: Magically expressive social media
 # Copyright © 2022-#{year} Akkoma Authors <https://akkoma.dev/>
+# SPDX-License-Identifier: AGPL-3.0-only
+# Spirit: A lightweight fediverse server
+# Copyright © 2023-#{year} null2264 <https://aap.my.id/>
 # SPDX-License-Identifier: AGPL-3.0-only
 
 ] |> String.replace("\n", "\\n")
