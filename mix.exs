@@ -17,6 +17,7 @@ defmodule Pleroma.Mixfile do
       preferred_cli_env: ["coveralls.html": :test],
       # Docs
       name: "Spirit",
+      compat_name: "Akkoma",
       homepage_url: "https://github.com/null2264/akkoma",
       source_url: "https://github.com/null2264/akkoma",
       docs: [
