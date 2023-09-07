@@ -18,10 +18,10 @@ defmodule Pleroma.Mixfile do
       # Docs
       name: "Spirit",
       compat_name: "Akkoma",
-      homepage_url: "https://github.com/null2264/akkoma",
-      source_url: "https://github.com/null2264/akkoma",
+      homepage_url: "https://github.com/null2264/spirit",
+      source_url: "https://github.com/null2264/spirit",
       docs: [
-        source_url_pattern: "https://github.com/null2264/akkoma/blob/develop/%{path}#L%{line}",
+        source_url_pattern: "https://github.com/null2264/spirit/blob/develop/%{path}#L%{line}",
         logo: "priv/static/images/logo.png",
         extras: ["README.md", "CHANGELOG.md"] ++ Path.wildcard("docs/**/*.md"),
         groups_for_extras: [
