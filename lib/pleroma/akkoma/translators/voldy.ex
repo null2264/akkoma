@@ -161,8 +161,7 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
 
   defp do_request(string, from_language, to_language) do
     HTTP.get(
-      base_url(),
-      URI.encode_query(
+      base_url() <> "&" <> URI.encode_query(
         %{
           q: string,
           tl: to_language,
