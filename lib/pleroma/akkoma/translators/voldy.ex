@@ -177,6 +177,6 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
     )
   end
 
-  defp maybe_add_source(opts, nil), do: opts
+  defp maybe_add_source(opts, nil), do: Map.put(opts, :sl, "auto")
   defp maybe_add_source(opts, lang), do: Map.put(opts, :sl, lang)
 end
