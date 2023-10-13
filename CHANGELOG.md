@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## Unreleased
+## 1.0.0 (Spirit) [Unreleased]
 
 ## Added
 - Full compatibility with Erlang OTP26
 - Handling of GET /api/v1/preferences
 - Support for indefinite polls
+- Added new translator
 
 ## Changed
 - OTP builds are now built on erlang OTP26
