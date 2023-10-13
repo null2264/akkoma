@@ -5,14 +5,15 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
   alias Pleroma.HTTP
   require Logger
 
-  defp base_url(:translate) do
+  defp base_url() do
     # Require browser-like user-agent
     "https://translate.googleapis.com/translate_a/single?client=gtx&dt=t"
   end
 
-  defp base_url(:clients5) do
-    "https://clients5.google.com/translate_a/t?client=dict-chrome-ex"
-  end
+  # TODO: Use later
+  # defp base_url(:clients5) do
+  #   "https://clients5.google.com/translate_a/t?client=dict-chrome-ex"
+  # end
 
   defp random_user_agent() do
     Enum.random([
@@ -160,7 +161,7 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
 
   defp do_request(string, from_language, to_language) do
     HTTP.get(
-      base_url(:translate),
+      base_url(),
       URI.encode_query(
         %{
           q: string,
