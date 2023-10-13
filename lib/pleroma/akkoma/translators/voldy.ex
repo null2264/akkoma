@@ -1,7 +1,7 @@
 defmodule Pleroma.Akkoma.Translators.Voldy do
   @behaviour Pleroma.Akkoma.Translator
 
-  alias Pleroma.Config
+  #alias Pleroma.Config
   alias Pleroma.HTTP
   require Logger
 
@@ -11,9 +11,9 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
   end
 
   # TODO: Use later
-  # defp base_url(:clients5) do
-  #   "https://clients5.google.com/translate_a/t?client=dict-chrome-ex"
-  # end
+  #defp base_url(:clients5) do
+  #  "https://clients5.google.com/translate_a/t?client=dict-chrome-ex"
+  #end
 
   defp random_user_agent() do
     Enum.random([
