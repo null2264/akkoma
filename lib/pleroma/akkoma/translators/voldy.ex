@@ -148,7 +148,7 @@ defmodule Pleroma.Akkoma.Translators.Voldy do
     with {:ok, %{status: 200} = response} <- do_request(string, from_language, to_language),
          {:ok, body} <- Jason.decode(response.body) do
 
-      {:ok, body[2], body[0][0][1]}
+      {:ok, Enum.at(body, 2), Enum.at(Enum.at(Enum.at(body, 0), 0), 1)}
     else
       {:ok, %{status: status} = response} ->
         Logger.warning("Voldy: Request rejected: #{inspect(response)}")
