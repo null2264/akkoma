@@ -1463,6 +1463,24 @@ defmodule Pleroma.Web.ActivityPub.ActivityPub do
     )
   end
 
+  @doc """
+  Fetch reactions activities of user with order by sort adds to reactions
+  """
+  @spec fetch_reactions(User.t(), map(), Pagination.type()) :: list(Activity.t())
+  def fetch_reactions(user, params \\ %{}, pagination \\ :keyset) do
+    user.ap_id
+    |> Activity.Queries.by_actor()
+    |> Activity.Queries.by_type("EmojiReact")
+    |> Activity.with_joined_object()
+    |> Object.with_joined_activity()
+    |> select([react, object, activity], %{activity | object: object, pagination_id: react.id})
+    |> order_by([react, _, _], desc_nulls_last: react.id)
+    |> Pagination.fetch_paginated(
+      Map.merge(params, %{skip_order: true}),
+      pagination
+    )
+  end
+
   defp maybe_update_cc(activities, [_ | _] = list_memberships, %User{ap_id: user_ap_id}) do
     Enum.map(activities, fn
       %{data: %{"bcc" => [_ | _] = bcc}} = activity ->
