@@ -936,6 +936,7 @@ defmodule Pleroma.Web.Router do
   end
 
   scope "/", Pleroma.Web.Fallback do
+    get("/authorize_interaction", RedirectController, :redirect_interaction)
     get("/registration/:token", RedirectController, :registration_page)
     get("/:maybe_nickname_or_id", RedirectController, :redirector_with_meta)
     get("/api/*path", RedirectController, :api_not_implemented)

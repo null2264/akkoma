@@ -128,4 +128,8 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   defp build_meta(:favicon, _) do
     "<link rel=\"icon\" href=\"#{Pleroma.Config.get([:instance, :favicon])}\">"
   end
+
+  def redirect_interaction(conn, %{"uri" => uri}) do
+    redirect(conn, to: "/ostatus_subscribe?acct=#{uri}")
+  end
 end
