@@ -130,6 +130,7 @@ defmodule Pleroma.Web.Fallback.RedirectController do
   end
 
   def redirect_interaction(conn, %{"uri" => uri}) do
-    redirect(conn, to: "/ostatus_subscribe?acct=#{uri}")
+    conn
+    |> redirect(to: ~p"/ostatus_subscribe?#{[acct: uri]}")
   end
 end
